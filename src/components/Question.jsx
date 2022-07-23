@@ -38,25 +38,25 @@ function Question({
 	useEffect(() => {
 		if (!withTimer) return
 
-		let seconds = withTimer
+		let seconds = question.time;
 
-		const countUp = setInterval(() => {
+		const countDown = setInterval(() => {
 			setTimer(seconds)
-			seconds++
+			seconds--
 
 			if (isAnswered) {
 				setTimer(0)
-				return clearInterval(countUp)
+				return clearInterval(countDown)
 			}
 
 			if (seconds < 0 && !isAnswered) {
 				setTimer(0)
 				handleTimeout.current()
-				return clearInterval(countUp)
+				return clearInterval(countDown)
 			}
 		}, 1000)
 
-		return () => clearInterval(countUp)
+		return () => clearInterval(countDown)
 	}, [withTimer, question, setTimer, isAnswered])
 
 	return (

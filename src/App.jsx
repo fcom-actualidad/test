@@ -107,15 +107,18 @@ function App() {
 		setQuestionsBank([{id: `00-${Date.now()}`,
 			question: "Esta es la pregunta 01",
 			answer: "opción01",
-			options: ["opción01","opción02","opción03"].sort(() => Math.random() - 0.5)},
+			options: ["opción01","opción02","opción03"].sort(() => Math.random() - 0.5),
+			time: 30},
 			{id: `01-${Date.now()}`,
 			question: "Esta es la pregunta 02",
 			answer: "opción03",
-			options: ["opción01","opción02","opción03"].sort(() => Math.random() - 0.5),},
+			options: ["opción01","opción02","opción03"].sort(() => Math.random() - 0.5),
+			time: 20},
 			{id: `02-${Date.now()}`,
 				question: "Esta es la pregunta 03",
 				answer: "opción02",
-				options: ["opción01","opción02","opción03"].sort(() => Math.random() - 0.5),}
+				options: ["opción01","opción02","opción03"].sort(() => Math.random() - 0.5),
+			time: 25}
 			]
 		)
 		setQuizInProgress(true)
