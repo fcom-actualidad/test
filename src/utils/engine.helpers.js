@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ReactSession } from 'react-client-session';
 
-const generalUri = "https://fractal-interactiva.herokuapp.com/api";
+const generalUri = "https://fcom-actualidad.herokuapp.com/api";
 
 export const registerPlayer = async (form) => {
     try {
