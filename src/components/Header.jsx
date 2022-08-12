@@ -8,12 +8,16 @@ function Header({
 	togglePassword,
 	currentPlayer,
 	handleLogout,
+	handleProfile
 }) {
 	return (
 		<header>
 			{currentPlayer && <div>
 				<h1>Hola, {currentPlayer.name}</h1>
-				<button type="button" onClick={handleLogout}>Log out</button>
+				<div className="buttons-section">
+					<button className="btn bg-green" type="button" onClick={handleProfile}>Mis Puntajes</button>
+				<button className="btn bg-red" type="button" onClick={handleLogout}>Salir</button>
+				</div>
 			</div>
 				}
 			{!currentPlayer &&<form onSubmit={handleSubmit}>
@@ -23,7 +27,6 @@ function Header({
 						id='email'
 						defaultValue='email'
 						disabled={loading || quizInProgress}
-						hide={currentPlayer !== null}
 					>
 					</input>
 				</div>
@@ -36,16 +39,17 @@ function Header({
 						disabled={loading || quizInProgress}
 					>
 					</input>
+					<div className="checkbox-container">
+						<label htmlFor="checkbox">Mostrar </label>
+						<input
+							id="checkbox"
+							type="checkbox"
+							checked={isShown}
+							onChange={togglePassword}
+						/>
+					</div>
 				</div>
-				<div className="checkbox-container">
-					<label htmlFor="checkbox">ver</label>
-					<input
-						id="checkbox"
-						type="checkbox"
-						checked={isShown}
-						onChange={togglePassword}
-					/>
-				</div>
+
 				<div className='form-group'>
 					<button
 						className='btn'
@@ -56,7 +60,7 @@ function Header({
 							? 'Loading...'
 							: quizInProgress
 							? 'En juego'
-							: 'Log in'}
+							: 'Ingresar'}
 					</button>
 				</div>
 			</form>}

@@ -1,11 +1,11 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
-import axios from 'axios'
 import Header from './components/Header'
 import Progress from './components/Progress'
 import Score from './components/Score'
 import Question from './components/Question'
 import Leaderboard from './components/Leaderboard'
 import SaveScore from './components/SaveScore'
+import Profile from './components/Profile'
 import {loginPlayer, checkGame, authPlayer} from './utils/engine.helpers'
 
 import { ReactSession } from 'react-client-session';
@@ -23,16 +23,19 @@ const calculatePercentage = (fraction, total) => {
 }
 
 function App() {
-	const [currentPlayer, setCurrentPlayer] = useState(null)
+	let userInit = null;
+	if(ReactSession.get("name") !== undefined){
+		userInit = {name:ReactSession.get("name"),email:ReactSession.get("email")}
+	}
+
+	const [currentPlayer, setCurrentPlayer] = useState(userInit)
 	const [error, setError] = useState(false)
 	const [isShown, setIsSHown] = useState(false);
 	const [gameInitialized, setGameInitialized] = useState(false);
 	const [loading, setLoading] = useState(false)
 	const [loadingQuestions, setLoadingQuestions] = useState(false)
-	const [apiOptions, setApiOptions] = useState({ amount: '5' })
 	const [withTimer, setWithTimer] = useState(true)
 	const [timer, setTimer] = useState(0)
-	const [categories, setCategories] = useState([])
 	const [questionsBank, setQuestionsBank] = useState([])
 	const [currentCategory, setCurrentCategory] = useState('General Knowledge')
 	const [currentQuestion, setCurrentQuestion] = useState(null)
@@ -42,6 +45,8 @@ function App() {
 	const [score, setScore] = useState(0)
 	const [quizInProgress, setQuizInProgress] = useState(false)
 	const [gameEnded, setGameEnded] = useState(false)
+	const [profile, setProfile] = useState(false)
+
 
 	const togglePassword = () => {
 		setIsSHown((isShown) => !isShown);
@@ -85,7 +90,14 @@ function App() {
 		ReactSession.remove("name");
 		ReactSession.remove("email");
 		ReactSession.remove("gameName");
+		ReactSession.remove("token");
+		setProfile(false)
 		setCurrentPlayer(null);
+	}
+
+	const handleMyProfile = async e =>{
+		e.preventDefault()
+		setProfile(true);
 	}
 
 	const handleSelectGameSubmit = async e =>{
@@ -94,10 +106,9 @@ function App() {
 		resetGame()
 		const gameName = e.target.gameCode.value;
 		const results = await checkGame(gameName);
-		console.log(results);
 		if (results.code === 200){
 			setGameInitialized(true);
-			setTotalQuestions(results.data.scenes.length);
+			setTotalQuestions(results.data.questions.length);
 		} else {
 			setError(results.errors);
 		}
@@ -166,6 +177,7 @@ function App() {
 
 	return (
 		<Fragment>
+			<div className='game-title'><a href="/"><h1> 🚀 TEST DE ACTUALIDAD</h1></a></div>
 			<Header
 				handleSubmit={handleSubmitLogin}
 				setWithTimer={setWithTimer}
@@ -176,25 +188,40 @@ function App() {
 				togglePassword = {togglePassword}
 				currentPlayer = {currentPlayer}
 				handleLogout = {handleLogout}
+				handleProfile = {handleMyProfile}
 			/>
 
 			<div className='container'>
 				{error && <div className='error-message'>{error}</div>}
 
 				{/*Loader visual para que el usuario sepa que se está ejectuando un proceso*/}
+
 				{loading && (
 					<p>
 						Cargando... <span className='loader'>⏳</span>
 					</p>
 				)}
 
-				{!quizInProgress && !totalQuestions && (
-					<Leaderboard setError={setError} />
-				)}
+				{
+					currentPlayer && profile && !quizInProgress && !gameInitialized && (
+						<Fragment>
+							<Profile
+								user={currentPlayer}
+								setError={setError}
+								resetGame={resetGame}
+							/>
+						</Fragment>
+
+					)
+				}
+
 
 				{
-					currentPlayer && !quizInProgress && !gameInitialized && (
+					currentPlayer && !profile && !quizInProgress && !gameInitialized && (
 						<form onSubmit={handleSelectGameSubmit}>
+							<div>
+								<p>Para responder el test debes indicar primero el código específico de la sesión que te corresponde</p>
+							</div>
 							<div className='form-group'>
 								<label htmlFor='gameCode'>Código de juego</label>
 								<input type="text"
@@ -213,7 +240,7 @@ function App() {
 										? 'Loading...'
 										: quizInProgress
 											? 'En juego'
-											: 'Jugar'}
+											: 'Responder'}
 								</button>
 							</div>
 						</form>
@@ -247,7 +274,7 @@ function App() {
 					</Fragment>
 				)}
 
-				{gameEnded && (
+				{gameEnded && !profile && (
 					<SaveScore
 						category={currentCategory}
 						score={score}
@@ -255,6 +282,11 @@ function App() {
 						resetGame={resetGame}
 					/>
 				)}
+				{gameEnded && !profile && (
+					<Leaderboard setError={setError} />
+				)}
+
+
 			</div>
 		</Fragment>
 	)

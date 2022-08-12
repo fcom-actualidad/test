@@ -2,6 +2,8 @@ import axios from "axios";
 import { ReactSession } from 'react-client-session';
 
 const generalUri = "https://fcom-actualidad.herokuapp.com/api";
+//const generalUri = "https://fractal-interactiva.herokuapp.com/api";
+//const generalUri = "http://localhost:3001/api";
 
 export const registerPlayer = async (form) => {
     try {
@@ -44,6 +46,7 @@ export const loginPlayer = async (form) => {
         return {code:500,errors:'🙁 Ocurrió un error y no logramos iniciar sesión. '}
     }
 }
+
 export const authPlayer = async (form) => {
     try {
         const auth = await axios({
@@ -126,7 +129,52 @@ export const newMessage = async () => {
     }
 }
 
+export const scores = async () => {
+    const gameName = ReactSession.get("gameName");
+    const email = ReactSession.get("email");
+    try {
+        const message = await axios({
+            method: 'GET',
+            url: generalUri+"/game/scores",
+            params: {gameName: gameName, email: email },
+            headers: {
+                'Authorization': "Bearer "+ReactSession.get("token")
+            },
+        })
 
+        if (message.length > 0) {
+            return {code:400,errors:'🙁 No logramos encontrar los puntajes aún!'}
+        }
+
+        return {code:200, message:message, user: email};
+    } catch (error) {
+        console.log(error)
+        return {code:500, errors: '🙁 Ocurrió un error y no logramos recuperar los puntajes.'}
+    }
+}
+
+export const grades = async () => {
+    const email = ReactSession.get("email");
+    try {
+        const message = await axios({
+            method: 'GET',
+            url: generalUri+"/game/grades",
+            params: {email: email },
+            headers: {
+                'Authorization': "Bearer "+ReactSession.get("token")
+            },
+        })
+
+        if (message.length > 0) {
+            return {code:400,errors:'🙁 No logramos encontrar los puntajes aún!'}
+        }
+
+        return {code:200, message:message, user: email};
+    } catch (error) {
+        console.log(error)
+        return {code:500, errors: '🙁 Ocurrió un error y no logramos recuperar los puntajes.'}
+    }
+}
 
 //Auth "/auth" +form
 // NextMessage  /game/messages?userName={userName}&gameName={gameName}&stageId={stageId}&character={characterId}")

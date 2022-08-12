@@ -4,7 +4,7 @@
 }
 
 body {
-	background-color: lightsteelblue;
+	background-color: #232323; /*lightsteelblue;*/
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
 		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
 		sans-serif;
@@ -12,7 +12,34 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	counter-reset: options;
 	height: 100vh;
+	max-width: 600px;
 	/* min-width: 450px; */
+	font-size: 14px;
+	color: #232323;
+	font-stretch: condensed;
+	text-align: center;
+	margin: 0 auto;
+}
+
+#root{
+	background-color: #f8f8f8;
+	height: 100vh;
+}
+
+.game-title{
+	text-align: center;
+	background: #232323;
+	width: 100%;
+	margin: 0 auto;
+	font-size: 12px;
+	color: aliceblue;
+	padding: 5px;
+	font-stretch: extra-condensed;
+}
+
+.game-title a, .game-title a:visited{
+	text-decoration: none;
+	color: aliceblue;
 }
 
 header {
@@ -20,7 +47,40 @@ header {
 	top: 0;
 	background-color: white;
 	box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3);
-	padding: 0 1rem 0.4rem;
+	padding: 5px 1rem 0.4rem;
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+header h1{
+	font-size: 20px;
+	margin-bottom: 3px;
+	font-stretch: extra-condensed;
+}
+
+.btn.bg-green {
+	background: #08986d;
+	color: white;
+	border: none;
+}
+
+.btn.bg-green:hover{
+	background: #057251;
+}
+
+.btn.bg-red {
+	background: #c54703;
+	color: white;
+	border: none;
+}
+
+.btn.bg-red:hover{
+	background: #933502;
+}
+
+header .btn{
+	width: 45%;
+	margin: 3px;
 }
 
 header > form {
@@ -36,6 +96,7 @@ header > form {
 	display: flex;
 	flex-direction: column;
 	margin: 0.5rem;
+	width: 95%;
 }
 
 .form-group > label {
@@ -51,6 +112,14 @@ header > form {
 .form-group > span {
 	color: #777;
 	font-size: 0.75rem;
+}
+
+.checkbox-container label{
+	font-size: 0.75rem;
+}
+
+.form-group .btn{
+	width: 100%;
 }
 
 .btn {
@@ -294,4 +363,8 @@ header > form {
 
 .leaderboard-group > ul > li:last-child {
 	margin-bottom: 0;
+}
+
+table{
+	display: inline-table;
 }
