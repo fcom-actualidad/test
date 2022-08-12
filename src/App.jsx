@@ -65,6 +65,7 @@ function App() {
 		setGameEnded(false)
 	}
 
+
 //función para realizar login en motor
 	const handleSubmitLogin = async e => {
 		e.preventDefault()
@@ -98,6 +99,11 @@ function App() {
 	const handleMyProfile = async e =>{
 		e.preventDefault()
 		setProfile(true);
+	}
+
+	const handleHome= async e =>{
+		e.preventDefault()
+		setProfile(false);
 	}
 
 	const handleSelectGameSubmit = async e =>{
@@ -177,7 +183,7 @@ function App() {
 
 	return (
 		<Fragment>
-			<div className='game-title'><a href="/"><h1> 🚀 TEST DE ACTUALIDAD</h1></a></div>
+			<div className='game-title'><a onClick={handleHome} href="/"><h1> 🚀 TEST DE ACTUALIDAD</h1></a></div>
 			<Header
 				handleSubmit={handleSubmitLogin}
 				setWithTimer={setWithTimer}
