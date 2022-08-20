@@ -39,9 +39,7 @@ function Leaderboard({ setError }) {
 					return setIsLoading(false)
 				}
 				//setTopScorer(mergeSortArray(playerData)[0])
-				console.log(playerData);
 				const merge = mergeSortArray(playerData);
-				console.log(merge);
 				const currentUser = findArrayElementByEdit(merge,scoresData.user)
 				setTopScorer(currentUser);
 				setLeaderboard(merge)
@@ -73,7 +71,7 @@ function Leaderboard({ setError }) {
 						<ul>
 							{leaderboard.filter((player, idx) => idx < 10).map((player,idx) => (
 
-								<li key={player}>
+								<li key={idx}>
 									{idx === 0 && '🥇 '}
 									{idx === 1 && '🥈 '}
 									{idx === 2 && '🥉 '}

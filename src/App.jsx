@@ -77,6 +77,7 @@ function App() {
 		if (results.code === 200){
 			setCurrentPlayer(results.data);
 			await authPlayer({email,password:pass});
+			console.log("logueado!");
 		} else {
 			setError(results.errors);
 		}
@@ -123,8 +124,8 @@ function App() {
 			} else {
 				setError(questions.errors);
 			}
-			
-			
+
+
 			//TEMPORAL, SOLO PRUEBA
 			// setQuestionsBank(
 			// 	[
@@ -142,13 +143,13 @@ function App() {
 			// 		time: 25}
 			// 	]
 			// )
-			
+
 		} else {
 			setError(results.errors);
 		}
 		setLoading(false);
-		
-		
+
+
 	}
 
 	const handleAnswers = data => {
@@ -219,12 +220,11 @@ function App() {
 				)}
 
 				{
-					currentPlayer && profile && !quizInProgress && !gameInitialized && (
+					currentPlayer && profile && (!quizInProgress || gameEnded) && (
 						<Fragment>
 							<Profile
 								user={currentPlayer}
 								setError={setError}
-								resetGame={resetGame}
 							/>
 						</Fragment>
 

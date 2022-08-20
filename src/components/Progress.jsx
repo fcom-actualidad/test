@@ -10,7 +10,7 @@ function Progress({ questionNum, totalQuestions, percentage }) {
 	return (
 		<div className='progress-conatiner'>
 			<div className='progress-text'>
-				Question {questionNum} of {totalQuestions}
+				Pregunta {questionNum} de {totalQuestions}
 			</div>
 			<div ref={progressRef} className='progress-bar'></div>
 		</div>

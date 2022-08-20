@@ -16,7 +16,6 @@ function Profile({ user, setError, resetGame }) {
                 console.log(error)
                 setError('🙁 Error.')
             }
-            resetGame()
             setIsLoading(false)
         })()
     }, [setError])
@@ -25,22 +24,25 @@ function Profile({ user, setError, resetGame }) {
         <div className='leaderboard'>
             <h3>Revisa tus calificaciones 🖥</h3>
             {myGrades &&
-            <div key='' className='leaderboard-group'>
+            <div className='leaderboard-group'>
                     <table>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Test</th>
-                            <th>Nota</th>
-                            <th>Puntaje</th>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Test</th>
+                                <th>Nota</th>
+                                <th>Puntaje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                     {myGrades.map((game,idx) => (
-                        <tr>
+                        <tr key={idx}>
                             <td>{new Date(game.updated_at).toLocaleDateString()}</td>
                             <td>{game.gameName}</td>
                             <td>{game.grade}</td>
                             <td>{game.finalScore}</td>
                         </tr>
-                    ))}
+                    ))}</tbody>
                 </table>
             </div>
             }
