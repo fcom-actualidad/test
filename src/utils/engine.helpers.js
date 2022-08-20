@@ -1,9 +1,9 @@
 import axios from "axios";
 import { ReactSession } from 'react-client-session';
 
-const generalUri = "https://fcom-actualidad.herokuapp.com/api";
+// const generalUri = "https://fcom-actualidad.herokuapp.com/api";
 //const generalUri = "https://fractal-interactiva.herokuapp.com/api";
-//const generalUri = "http://localhost:3001/api";
+const generalUri = "http://localhost:3001/api";
 
 export const registerPlayer = async (form) => {
     try {
@@ -86,8 +86,29 @@ export const checkGame = async (uncheckedGameName) => {
         return {code:200, data:game.data};
     } catch (error) {
         console.log(error)
-        return {code:500,errors:'🙁 Ocurrió un error y no logramos iniciar sesión.'}
+        return {code:404,errors:'🙁 No logramos encontrar el juego!'}
     }
+}
+
+export const getQuestions = async (gameId) => {
+    try {
+        const response = await axios({
+            method: 'GET',
+            url: generalUri+"/game/questions",
+            params: {gameId:gameId },
+            headers: {
+                'Authorization': "Bearer "+ReactSession.get("token")
+            },
+        })
+        if (response.status !== 200) {
+            return undefined;
+        }
+        return {code:200, data:response.data};
+    } catch (error) {
+        console.log(error)
+        return {code:404,errors:'🙁 No logramos encontrar el juego!'}
+    }
+    
 }
 
 export const newMessage = async () => {

@@ -17,8 +17,8 @@ function Question({
 		setIsAnswered(true)
 		//enviar timer también, además de respuesta
 		handleAnswers({
-			id: question.id,
-			isCorrectAnswer: question.answer === option,
+			id: question._id,
+			isCorrectAnswer: option.correct,
 		})
 	}
 
@@ -67,25 +67,25 @@ function Question({
 				{question.options.map((option, idx) =>
 					isAnswered ? (
 						<li
-							key={option}
+							key={option._id}
 							className={`answered
 								${
 									option === chosenAnwser
-										? chosenAnwser === question.answer
+										? option.correct
 											? 'isRight'
 											: 'isWrong'
 										: chosenAnwser !== question.answer &&
-										  option === question.answer
+										  option.correct
 										? 'isRight'
 										: ''
 								} 
 							`}
 						>
-							{option}
+							{option.content}
 						</li>
 					) : (
-						<li key={option} onClick={() => handleChosenAnser(option)}>
-							{option}
+						<li key={option._id} onClick={() => handleChosenAnser(option)}>
+							{option.content}
 						</li>
 					)
 				)}

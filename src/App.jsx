@@ -6,7 +6,7 @@ import Question from './components/Question'
 import Leaderboard from './components/Leaderboard'
 import SaveScore from './components/SaveScore'
 import Profile from './components/Profile'
-import {loginPlayer, checkGame, authPlayer} from './utils/engine.helpers'
+import {loginPlayer, checkGame, authPlayer, getQuestions} from './utils/engine.helpers'
 
 import { ReactSession } from 'react-client-session';
 ReactSession.setStoreType("localStorage");
@@ -115,30 +115,40 @@ function App() {
 		if (results.code === 200){
 			setGameInitialized(true);
 			setTotalQuestions(results.data.questions.length);
+			let questions = await getQuestions(results.data._id);
+			if (questions.code === 200){
+				// console.log("questions:", questions.data)
+				setQuestionsBank(questions.data);
+				setQuizInProgress(true)
+			} else {
+				setError(questions.errors);
+			}
+			
+			
+			//TEMPORAL, SOLO PRUEBA
+			// setQuestionsBank(
+			// 	[
+			// 		{id: `00-${Date.now()}`,
+			// 		question: "Esta es la pregunta 01",
+			// 		options: ["opción01","opción02","opción03"].sort(() => Math.random() - 0.5),
+			// 		time: 30},
+			// 		{id: `01-${Date.now()}`,
+			// 		question: "Esta es la pregunta 02",
+			// 		options: ["opción01","opción02","opción03"].sort(() => Math.random() - 0.5),
+			// 		time: 20},
+			// 		{id: `02-${Date.now()}`,
+			// 			question: "Esta es la pregunta 03",
+			// 			options: ["opción01","opción02","opción03"].sort(() => Math.random() - 0.5),
+			// 		time: 25}
+			// 	]
+			// )
+			
 		} else {
 			setError(results.errors);
 		}
 		setLoading(false);
-
-		//TEMPORAL, SOLO PRUEBA
-		setQuestionsBank([{id: `00-${Date.now()}`,
-			question: "Esta es la pregunta 01",
-			answer: "opción01",
-			options: ["opción01","opción02","opción03"].sort(() => Math.random() - 0.5),
-			time: 30},
-			{id: `01-${Date.now()}`,
-			question: "Esta es la pregunta 02",
-			answer: "opción03",
-			options: ["opción01","opción02","opción03"].sort(() => Math.random() - 0.5),
-			time: 20},
-			{id: `02-${Date.now()}`,
-				question: "Esta es la pregunta 03",
-				answer: "opción02",
-				options: ["opción01","opción02","opción03"].sort(() => Math.random() - 0.5),
-			time: 25}
-			]
-		)
-		setQuizInProgress(true)
+		
+		
 	}
 
 	const handleAnswers = data => {
