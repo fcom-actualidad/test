@@ -6,7 +6,7 @@ import Question from './components/Question'
 import Leaderboard from './components/Leaderboard'
 import SaveScore from './components/SaveScore'
 import Profile from './components/Profile'
-import {loginPlayer, checkGame, authPlayer, getQuestions} from './utils/engine.helpers'
+import {loginPlayer, checkGame, authPlayer, getQuestions, postAnswer} from './utils/engine.helpers'
 
 import { ReactSession } from 'react-client-session';
 ReactSession.setStoreType("localStorage");
@@ -92,6 +92,7 @@ function App() {
 		ReactSession.remove("name");
 		ReactSession.remove("email");
 		ReactSession.remove("gameName");
+		ReactSession.remove("gameId");
 		ReactSession.remove("token");
 		setProfile(false)
 		setCurrentPlayer(null);
@@ -118,7 +119,6 @@ function App() {
 			setTotalQuestions(results.data.questions.length);
 			let questions = await getQuestions(results.data._id);
 			if (questions.code === 200){
-				// console.log("questions:", questions.data)
 				setQuestionsBank(questions.data);
 				setQuizInProgress(true)
 			} else {
@@ -153,8 +153,11 @@ function App() {
 	}
 
 	const handleAnswers = data => {
+		if (!data) return;
+		console.log("Post answer:", data.questionId, data.option, data.time);
+		postAnswer(data.questionId, data.option, data.time);
 		setAnswers(prevData => [...prevData, data])
-		setScore('?')
+		setScore(score + data.score)
 	}
 
 	const setNewScoreAndQuestionNum = useRef()
@@ -286,6 +289,7 @@ function App() {
 							gameEnded={gameEnded}
 							setTimer={setTimer}
 							withTimer={withTimer}
+							timer={timer}
 						/>
 					</Fragment>
 				)}

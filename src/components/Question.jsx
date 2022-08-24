@@ -7,6 +7,7 @@ function Question({
 	withTimer,
 	lastQuestion,
 	gameEnded,
+	timer,
 }) {
 	const [isAnswered, setIsAnswered] = useState(false)
 	const [chosenAnwser, setChosenAnwser] = useState('')
@@ -17,9 +18,12 @@ function Question({
 		setIsAnswered(true)
 		//enviar timer también, además de respuesta
 		handleAnswers({
-			id: question._id,
-			isCorrectAnswer: option.correct,
+			questionId: question._id,
+			option: option._id,
+			time: question.time - timer,
+			score: question.score + timer,
 		})
+		
 	}
 
 	const handleTimeout = useRef()

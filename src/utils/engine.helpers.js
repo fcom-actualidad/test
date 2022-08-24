@@ -82,6 +82,7 @@ export const checkGame = async (uncheckedGameName) => {
             return {code:400,errors: '🙁 No logramos encontrar el juego!'}
         }
         ReactSession.set("gameName", game.data.gameName);
+        ReactSession.set("gameId", game.data._id);
         //ReactSession.get("username");
         return {code:200, data:game.data};
     } catch (error) {
@@ -107,6 +108,28 @@ export const getQuestions = async (gameId) => {
     } catch (error) {
         console.log(error)
         return {code:404,errors:'🙁 No logramos encontrar el juego!'}
+    }
+    
+}
+
+export const postAnswer = async (questionId, answerId, time) => {
+    const gameId = ReactSession.get("gameId")
+    try {
+        const response = await axios({
+            method: 'POST',
+            url: generalUri+"/game/answer",
+            data: {answerId: answerId, gameId: gameId, time: time, questionId: questionId},
+            headers: {
+                'Authorization': "Bearer "+ReactSession.get("token")
+            },
+        })
+        if (response.status !== 200) {
+            return undefined;
+        }
+        return {code:200, data:response.data};
+    } catch (error) {
+        console.log(error)
+        return {code:404,errors:'🙁 Error al guardar la respuesta!'}
     }
     
 }
