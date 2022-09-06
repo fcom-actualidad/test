@@ -8,7 +8,7 @@ function Score({ score, timer, withTimer }) {
 				</div>
 			)}
 			<div>
-				<div className='score-timer-text'>Score</div>
+				<div className='score-timer-text'>Correctas</div>
 				<div className='score-timer-number'>{score}</div>
 			</div>
 		</div>

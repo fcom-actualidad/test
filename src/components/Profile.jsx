@@ -39,7 +39,7 @@ function Profile({ user, setError, resetGame }) {
                         <tr key={idx}>
                             <td>{new Date(game.updated_at).toLocaleDateString()}</td>
                             <td>{game.gameName}</td>
-                            <td>{game.grade}</td>
+                            <td>{(game.grade/10).toFixed(1)}</td>
                             <td>{game.finalScore}</td>
                         </tr>
                     ))}</tbody>

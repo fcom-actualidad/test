@@ -1,9 +1,9 @@
 import axios from "axios";
 import { ReactSession } from 'react-client-session';
+import { decodeToken } from "react-jwt";
 
-// const generalUri = "https://fcom-actualidad.herokuapp.com/api";
-//const generalUri = "https://fractal-interactiva.herokuapp.com/api";
-const generalUri = "http://localhost:3001/api";
+const generalUri = "https://fcom-actualidad.herokuapp.com/api";
+//const generalUri = "http://localhost:3001/api";
 
 export const registerPlayer = async (form) => {
     try {
@@ -104,12 +104,24 @@ export const getQuestions = async (gameId) => {
         if (response.status !== 200) {
             return undefined;
         }
+
+        if (response.data.code === 405){
+            return {code:405, data:response.data};
+        }
+
+        response.data.forEach(q=>{
+            q.options.forEach(a =>{
+                const myDecodedToken = decodeToken(a.correct);
+                a.correct = myDecodedToken;
+            })
+        })
+
         return {code:200, data:response.data};
     } catch (error) {
         console.log(error)
         return {code:404,errors:'🙁 No logramos encontrar el juego!'}
     }
-    
+
 }
 
 export const postAnswer = async (questionId, answerId, time) => {
@@ -131,7 +143,7 @@ export const postAnswer = async (questionId, answerId, time) => {
         console.log(error)
         return {code:404,errors:'🙁 Error al guardar la respuesta!'}
     }
-    
+
 }
 
 export const newMessage = async () => {

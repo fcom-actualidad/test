@@ -116,11 +116,17 @@ function App() {
 		const results = await checkGame(gameName);
 		if (results.code === 200){
 			setGameInitialized(true);
-			setTotalQuestions(results.data.questions.length);
 			let questions = await getQuestions(results.data._id);
 			if (questions.code === 200){
+				questions.data = questions.data.sort(() => Math.random() - 0.5);
+				questions.data.forEach(a=>{
+					a.options = a.options.sort(() => Math.random() - 0.5);
+				})
+				setTotalQuestions(questions.data.length);
 				setQuestionsBank(questions.data);
 				setQuizInProgress(true)
+			} else if(questions.code === 405) {
+				setGameEnded(true);
 			} else {
 				setError(questions.errors);
 			}
@@ -154,25 +160,25 @@ function App() {
 
 	const handleAnswers = data => {
 		if (!data) return;
-		console.log("Post answer:", data.questionId, data.option, data.time);
+		console.log("Post answer:", data,data.questionId, data.option, data.time);
 		postAnswer(data.questionId, data.option, data.time);
 		setAnswers(prevData => [...prevData, data])
-		setScore(score + data.score)
+		setScore(score + (data.correct ? 1 : 0))
 	}
 
 	const setNewScoreAndQuestionNum = useRef()
 
 	setNewScoreAndQuestionNum.current = () => {
-		let newScore = 0
+		let newScore = score;
 
 		for (const answer of answers) {
-			if (answer !== null && answer.isCorrectAnswer) newScore += 100
+			if (answer !== null && answer.isCorrectAnswer) newScore += 1;
 		}
 
 		setScore(newScore)
 
 		if (questionNum < totalQuestions) {
-			setCurrentQuestion(questionsBank[questionNum])
+			setCurrentQuestion(questionsBank[questionNum]);
 			setQuestionNum(questionNum + 1)
 		}
 

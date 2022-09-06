@@ -10,11 +10,11 @@ function Question({
 	timer,
 }) {
 	const [isAnswered, setIsAnswered] = useState(false)
-	const [chosenAnwser, setChosenAnwser] = useState('')
+	const [chosenAnswer, setChosenAnswer] = useState('')
 
 	//enviar respuesta a motor acá
-	const handleChosenAnser = option => {
-		setChosenAnwser(option)
+	const handleChosenAnswer = option => {
+		setChosenAnswer(option)
 		setIsAnswered(true)
 		//enviar timer también, además de respuesta
 		handleAnswers({
@@ -22,20 +22,27 @@ function Question({
 			option: option._id,
 			time: question.time - timer,
 			score: question.score + timer,
+			correct: option.correct
 		})
-		
+
 	}
 
 	const handleTimeout = useRef()
 
 	handleTimeout.current = () => {
-		setChosenAnwser(question.answer)
+		setChosenAnswer(question.answer)
 		setIsAnswered(true)
-		handleAnswers(null)
+		handleAnswers({
+			questionId: question._id,
+			option: null,
+			time: question.time - timer,
+			score: question.score + timer,
+			correct: false
+		})
 	}
 
 	useEffect(() => {
-		setChosenAnwser('')
+		setChosenAnswer('')
 		setIsAnswered(false)
 	}, [question])
 
@@ -56,6 +63,7 @@ function Question({
 			if (seconds < 0 && !isAnswered) {
 				setTimer(0)
 				handleTimeout.current()
+				console.log("timeout");
 				return clearInterval(countDown)
 			}
 		}, 1000)
@@ -74,11 +82,11 @@ function Question({
 							key={option._id}
 							className={`answered
 								${
-									option === chosenAnwser
+									option === chosenAnswer
 										? option.correct
 											? 'isRight'
 											: 'isWrong'
-										: chosenAnwser !== question.answer &&
+										: chosenAnswer !== question.answer &&
 										  option.correct
 										? 'isRight'
 										: ''
@@ -88,7 +96,7 @@ function Question({
 							{option.content}
 						</li>
 					) : (
-						<li key={option._id} onClick={() => handleChosenAnser(option)}>
+						<li key={option._id} onClick={() => handleChosenAnswer(option)}>
 							{option.content}
 						</li>
 					)

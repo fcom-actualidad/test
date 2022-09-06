@@ -59,7 +59,7 @@ function Leaderboard({ setError }) {
 				<div className='leaderboard-group gold'>
 					<h3>Tu puntaje Obtenido</h3>
 					<span>
-						{topScorer.userName} - {topScorer.finalScore}
+						{topScorer.email} - {topScorer.finalScore}
 					</span>
 					<h5>Nota: {(topScorer.grade/10).toFixed(1)}</h5>
 				</div>
