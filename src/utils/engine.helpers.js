@@ -2,7 +2,7 @@ import axios from "axios";
 import { ReactSession } from 'react-client-session';
 import { decodeToken } from "react-jwt";
 
-const generalUri = "https://fcom-actualidad.herokuapp.com/api";
+const generalUri = "https://engine-fcom.onrender.com/api";
 //const generalUri = "http://localhost:3001/api";
 
 export const registerPlayer = async (form) => {
