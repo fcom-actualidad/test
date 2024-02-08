@@ -73,7 +73,7 @@ function Question({
 
 	return (
 		<article className='question'>
-			<h2>{question.question}</h2>
+			<h4>{question.question}</h4>
 
 			<ul>
 				{question.options.map((option, idx) =>

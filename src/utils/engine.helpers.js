@@ -2,8 +2,8 @@ import axios from "axios";
 import { ReactSession } from 'react-client-session';
 import { decodeToken } from "react-jwt";
 
-const generalUri = "https://engine-fcom.onrender.com/api";
-//const generalUri = "http://localhost:3001/api";
+//const generalUri = "https://engine-fcom.onrender.com/api";
+const generalUri = "http://localhost:3000/api";
 
 export const registerPlayer = async (form) => {
     try {
@@ -40,6 +40,7 @@ export const loginPlayer = async (form) => {
         ReactSession.set("email", form.email);
         ReactSession.set("name", login.data.name);
         ReactSession.set("username", form.username);
+        ReactSession.set("rut", form.rut );
         return {code:200, data: login.data};
     } catch (error) {
         console.log(error)

@@ -221,7 +221,7 @@ header > form {
 	margin-bottom: 0.5rem;
 }
 
-.question > h2 {
+.question > h2, .question > h4 {
 	margin-bottom: 1rem;
 	text-align: center;
 }

@@ -102,7 +102,7 @@ function App() {
 		});
 		if (gotUser){
 			setLoading(true);
-			const results = await loginPlayer({email:dataUser.email, username:dataUser.username, name:dataUser.name});
+			const results = await loginPlayer({email:dataUser.email, username:dataUser.username, name:dataUser.name, rut:dataUser.rut});
 			if (results.code === 200){
 				setCurrentPlayer(results.data);
 				await authPlayer({email:dataUser.email});

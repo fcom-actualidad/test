@@ -75,6 +75,24 @@ export default {
             if (!email) {
                 throw new Error("Attribute email not found");
             }
-            return {code:200, name: name, username: username, email: email}
+
+            const [row3] = Array.from(tableRows).filter((tr) => {
+                const span = tr.querySelector(":scope > td code kbd");
+                return span?.innerText === "carlicense";
+            });
+
+            if (!row3) {
+                throw new Error("Attribute row for email not found");
+            }
+
+            const displayRutSpan = row3.querySelector(
+                ":scope td:is(:last-child) code kbd"
+            );
+
+            const rut = displayRutSpan?.innerText.slice(1, -1);
+            if (!rut) {
+                throw new Error("Attribute email not found");
+            }
+            return {code:200, name: name, username: username, email: email, rut: rut};
         }
 };
