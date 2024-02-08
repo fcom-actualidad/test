@@ -39,7 +39,7 @@ export const loginPlayer = async (form) => {
         }
         ReactSession.set("email", form.email);
         ReactSession.set("name", login.data.name);
-        //ReactSession.get("username");
+        ReactSession.set("username", form.username);
         return {code:200, data: login.data};
     } catch (error) {
         console.log(error)
@@ -122,6 +122,30 @@ export const getQuestions = async (gameId) => {
         return {code:404,errors:'🙁 No logramos encontrar el juego!'}
     }
 
+}
+
+export const newEmpty = async ()=>{
+    try{
+        const saveEmpty = await axios({
+            method: 'POST',
+            url: generalUri+"/game/newEmpty",
+            data: {gameName:ReactSession.get("gameName"), userName: ReactSession.get("username") },
+            headers: {
+                'Authorization': 'Bearer '+ReactSession.get("token")
+            }
+        })
+        if (saveEmpty.status !== 200) {
+            console.log("error",saveEmpty);
+            return undefined;
+        }
+        else{
+            console.log("ok, saved exists",saveEmpty);
+            return {code:200, data:saveEmpty.data};
+        }
+    } catch (error) {
+        console.log(error)
+        return {code:404,errors:'🙁 Error al guardar la partida!'}
+    }
 }
 
 export const postAnswer = async (questionId, answerId, time) => {

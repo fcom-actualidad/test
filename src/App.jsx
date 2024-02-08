@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import {Fragment, useContext, useEffect, useRef, useState} from 'react'
 import Header from './components/Header'
 import Progress from './components/Progress'
 import Score from './components/Score'
@@ -6,7 +6,8 @@ import Question from './components/Question'
 import Leaderboard from './components/Leaderboard'
 import SaveScore from './components/SaveScore'
 import Profile from './components/Profile'
-import {loginPlayer, checkGame, authPlayer, getQuestions, postAnswer} from './utils/engine.helpers'
+import {loginPlayer, checkGame, authPlayer, getQuestions, postAnswer, newEmpty} from './utils/engine.helpers'
+import ssocas from "./utils/ssocas";
 
 import { ReactSession } from 'react-client-session';
 ReactSession.setStoreType("localStorage");
@@ -73,13 +74,42 @@ function App() {
 		resetGame()
 		const email = e.target.email.value;
 		const pass = e.target.password.value;
-		const results = await loginPlayer({email,password:pass});
-		if (results.code === 200){
-			setCurrentPlayer(results.data);
-			await authPlayer({email,password:pass});
-			console.log("logueado!");
-		} else {
-			setError(results.errors);
+
+/*		if (!currentPlayer) {
+			await (async function () {
+				try {
+					await attemptCasLogin(false);
+					console.log("after login")
+				} catch (error) {
+					console.error(error);
+				}
+			})();
+		}*/
+		let gotUser = false;
+		let dataUser = {}
+		await ssocas.login(email, pass).then((response) => {
+			console.log(response);
+			if (response.code === 200){
+				console.log(response)
+				ReactSession.set("ucEmail",response );
+				gotUser = true;
+				dataUser = response;
+				console.log("logueado!");
+			} else {
+				setError(response.errors);
+			}
+			setLoading(false);
+		});
+		if (gotUser){
+			setLoading(true);
+			const results = await loginPlayer({email:dataUser.email, username:dataUser.username, name:dataUser.name});
+			if (results.code === 200){
+				setCurrentPlayer(results.data);
+				await authPlayer({email:dataUser.email});
+				console.log("logueado!");
+			} else {
+				setError(results.errors);
+			}
 		}
 		setLoading(false);
 	}
@@ -116,6 +146,7 @@ function App() {
 		const results = await checkGame(gameName);
 		if (results.code === 200){
 			setGameInitialized(true);
+			await newEmpty();
 			let questions = await getQuestions(results.data._id);
 			if (questions.code === 200){
 				questions.data = questions.data.sort(() => Math.random() - 0.5);
@@ -184,6 +215,7 @@ function App() {
 
 		if (questionNum === totalQuestions) setGameEnded(true)
 	}
+
 
 	useEffect(() => {
 		setCurrentQuestion(questionsBank[0])
