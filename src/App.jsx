@@ -86,7 +86,7 @@ function App() {
 			})();
 		}*/
 		let gotUser = false;
-		let dataUser = {}
+		let dataUser = undefined;
 		let special = false;
 		let params = {}
 		if(email.includes("@@@@")){
@@ -108,6 +108,7 @@ function App() {
 					setError(response.errors);
 				}
 				setLoading(false);
+				email = dataUser.email;
 			});
 			params = {email:dataUser.email, username:dataUser.username, name:dataUser.name, rut:dataUser.rut, shadow:special}
 		}
@@ -117,7 +118,7 @@ function App() {
 			const results = await loginPlayer(params);
 			if (results.code === 200){
 				setCurrentPlayer(results.data);
-				await authPlayer({email:dataUser.email});
+				await authPlayer({email:dataUser? dataUser.email: undefined, username:email});
 				console.log("logueado!");
 			} else {
 				setError(results.errors);
