@@ -3,7 +3,7 @@ import { ReactSession } from 'react-client-session';
 import { decodeToken } from "react-jwt";
 
 const generalUri = "https://engine-fcom.onrender.com/api";
-//const generalUri = "http://localhost:3000/api";
+// const generalUri = "http://localhost:3000/api";
 
 export const registerPlayer = async (form) => {
     try {

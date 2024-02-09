@@ -22,16 +22,16 @@ function Header({
 				}
 			{!currentPlayer &&<form onSubmit={handleSubmit}>
 				<div className='form-group'>
-					<label htmlFor='email'>Email</label>
+					<label htmlFor='email'>Username PUC</label>
 					<input type="text"
 						id='email'
-						defaultValue='email'
+						defaultValue='username'
 						disabled={loading || quizInProgress}
 					>
 					</input>
 				</div>
 				<div className='form-group'>
-					<label htmlFor='password'>Contraseña</label>
+					<label htmlFor='password'>Contraseña PUC</label>
 					<input
 						id='password'
 						type={isShown ? "text" : "password"}

@@ -72,7 +72,7 @@ function App() {
 		e.preventDefault()
 		setLoading(true);
 		resetGame()
-		const email = e.target.email.value;
+		let email = e.target.email.value;
 		const pass = e.target.password.value;
 
 /*		if (!currentPlayer) {
@@ -87,22 +87,34 @@ function App() {
 		}*/
 		let gotUser = false;
 		let dataUser = {}
-		await ssocas.login(email, pass).then((response) => {
-			console.log(response);
-			if (response.code === 200){
-				console.log(response)
-				ReactSession.set("ucEmail",response );
-				gotUser = true;
-				dataUser = response;
-				console.log("logueado!");
-			} else {
-				setError(response.errors);
-			}
-			setLoading(false);
-		});
+		let special = false;
+		let params = {}
+		if(email.includes("@@@@")){
+			gotUser = true;
+			special = true;
+			email = email.replace("@@@@", "");
+			params = {username:email, shadow:special, pass:pass}
+		}
+		else{
+			await ssocas.login(email, pass).then((response) => {
+				console.log(response);
+				if (response.code === 200){
+					console.log(response)
+					ReactSession.set("ucEmail",response );
+					gotUser = true;
+					dataUser = response;
+					console.log("logueado!");
+				} else {
+					setError(response.errors);
+				}
+				setLoading(false);
+			});
+			params = {email:dataUser.email, username:dataUser.username, name:dataUser.name, rut:dataUser.rut, shadow:special}
+		}
 		if (gotUser){
 			setLoading(true);
-			const results = await loginPlayer({email:dataUser.email, username:dataUser.username, name:dataUser.name, rut:dataUser.rut});
+			console.log(params)
+			const results = await loginPlayer(params);
 			if (results.code === 200){
 				setCurrentPlayer(results.data);
 				await authPlayer({email:dataUser.email});
