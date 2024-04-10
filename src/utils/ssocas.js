@@ -7,7 +7,13 @@ export default {
     login: async (username, password) => {
         const loginEndpoint = "https://sso.uc.cl/cas/login";
 
-        const initialForm = await (await fetch(loginEndpoint
+        const initialForm = await (await fetch(loginEndpoint,
+            {
+                headers: {
+                    'Access-Control-Allow-Origin': 'https://fcom-test.onrender.com',
+                    'Access-Control-Allow-Methods': 'GET, POST',
+                }
+            }
             )).text();
         const doc = new DOMParser().parseFromString(initialForm, "text/html");
         const loginTicketField = doc.querySelector('input[name="execution"]');
@@ -25,6 +31,10 @@ export default {
 
 
             const websiteText = await (await fetch(loginEndpoint, {
+                headers: {
+                    'Access-Control-Allow-Origin': 'https://fcom-test.onrender.com',
+                    'Access-Control-Allow-Methods': 'GET, POST',
+                },
                 method: "POST",
                 body,
             })).text();
