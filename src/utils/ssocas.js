@@ -5,7 +5,7 @@ export default {
     action: "login",
     redirect: null,
     login: async (username, password) => {
-        const loginEndpoint = "https://sso.uc.cl/cas/login";
+        const loginEndpoint = "https://fcom-proxy.onrender.com/https://sso.uc.cl/cas/login";
         let myHeaders = new Headers();
         myHeaders.append("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:122.0) Gecko/20100101 Firefox/122.0");
         myHeaders.append("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8");
@@ -39,31 +39,24 @@ export default {
         };
 
         console.log(requestOptions);
-        const initialForm = await (await  fetch("https://sso.uc.cl/cas/login",
-            requestOptions)).text();
-        const doc = new DOMParser().parseFromString(initialForm, "text/html");
-        const loginTicketField = doc.querySelector('input[name="execution"]');
+        //const initialForm = await (await  fetch("https://fcom-proxy.onrender.com/https://sso.uc.cl/cas/login",
+        //    requestOptions)).text();
+        // const doc = new DOMParser().parseFromString(initialForm, "text/html");
+        // const loginTicketField = doc.querySelector('input[name="execution"]');
+        //
+        // if (!loginTicketField) {
+        //     return;
+        // }
+        // console.log("SSO CAS UC login");
+        // const body = new FormData();
+        // body.append("username", username);
+        // body.append("password", password);
+        // body.append("_eventId", "submit");
+        // body.append("execution", loginTicketField.getAttribute("value"));
+        //
 
-        if (!loginTicketField) {
-            return;
-        }
-        console.log("SSO CAS UC login");
-        const body = new FormData();
-        body.append("username", username);
-        body.append("password", password);
-        body.append("_eventId", "submit");
-        body.append("execution", loginTicketField.getAttribute("value"));
 
-
-
-            const websiteText = await (await fetch(loginEndpoint, {
-                headers: {
-                    'Access-Control-Allow-Origin': 'https://fcom-test.onrender.com',
-                    'Access-Control-Allow-Methods': 'GET, POST',
-                },
-                method: "POST",
-                body,
-            })).text();
+            const websiteText = await (await fetch(loginEndpoint, requestOptions)).text();
             const docResponse = new DOMParser().parseFromString(websiteText, "text/html");
             console.log(docResponse);
             const tableRows = docResponse.querySelectorAll(
